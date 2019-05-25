@@ -1,5 +1,5 @@
 const express = require('express')
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
 
@@ -11,10 +11,14 @@ const port = process.env.PORT || 5000
 app.use(cors())
 
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json());
+app.use(bodyParser.json())
 
 const uri = process.env.ATLAS_URI
-mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false
+})
 
 const connection = mongoose.connection
 
