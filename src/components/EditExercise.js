@@ -11,16 +11,18 @@ const EditExercise = ({ match }) => {
   const [date, setDate] = useState(new Date())
   const [users, setUsers] = useState([])
   useEffect(() => {
+    debugger
     axios
       .get(`http://localhost:5000/exercises/${match.params.id}`)
       .then(res => {
+        debugger
         setUsername(res.data.username)
         setDescription(res.data.description)
         setDuration(res.data.duration)
         setDate(new Date(res.data.date))
       })
       .catch(err => console.log(err))
-  }, [match.params.id])
+  }, [username, match.params.id])
   useEffect(() => {
     axios
       .get('http://localhost:5000/users/')

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Navbar = props => {
+const Navbar = () => {
   return (
-    <nav className='navbar navbar-dark bg-dark navbar-expand-lg'>
+    <nav className='navbar navbar-dark bg-dark navbar-expand-lg mb-3'>
       <Link to='/' className='navbar-brand'>
         ExerTracker
       </Link>
