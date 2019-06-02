@@ -22,7 +22,7 @@ const EditExercise = ({ match }) => {
         setDate(new Date(res.data.date))
       })
       .catch(err => console.log(err))
-  }, [username, match.params.id])
+  }, [match.params.id])
   useEffect(() => {
     axios
       .get('http://localhost:5000/users/')
@@ -44,6 +44,7 @@ const EditExercise = ({ match }) => {
         exercise
       )
       .then(res => console.log(res.data))
+      .catch(err => console.log(err))
     setUsername('')
     window.location = '/'
   }
@@ -101,7 +102,7 @@ const EditExercise = ({ match }) => {
         <div className='form-group'>
           <input
             type='submit'
-            value='Create exercise log'
+            value='Edit exercise log'
             className='btn btn-primary'
           />
         </div>

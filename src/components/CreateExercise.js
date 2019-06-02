@@ -3,12 +3,12 @@ import axios from 'axios'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
-const CreateExercise = props => {
+const CreateExercise = () => {
   const inputEl = useRef(null)
-  const [username, setUsername] = useState('')
-  const [description, setDescription] = useState('')
-  const [duration, setDuration] = useState(0)
-  const [date, setDate] = useState(new Date())
+  const username = useFormInput('')
+  const description = useFormInput('')
+  const duration = useFormInput(0)
+  const date = useFormInput(new Date())
   const [users, setUsers] = useState([])
   useEffect(() => {
     axios
@@ -16,19 +16,23 @@ const CreateExercise = props => {
       .then(res => {
         if (res.data.length > 0) {
           setUsers(res.data.map(user => user.username))
-          setUsername(res.data[0].username)
         }
       })
       .catch(err => console.log(err))
   }, [])
   const onSubmit = e => {
     e.preventDefault()
-    const exercise = { username, description, duration, date }
-    console.log(exercise)
+    const exercise = {
+      username: username.value,
+      description: description.value,
+      duration: duration.value,
+      date: date.value
+    }
     axios
       .post('http://localhost:5000/exercises/add', exercise)
       .then(res => console.log(res.data))
-    setUsername('')
+      debugger
+    // setUsername('')
     window.location = '/'
   }
   return (
@@ -37,13 +41,7 @@ const CreateExercise = props => {
       <form onSubmit={e => onSubmit(e)}>
         <div className='form-group'>
           <label>Username: </label>
-          <select
-            ref={inputEl}
-            required
-            className='form-control'
-            value={username}
-            onChange={({ target: { value } }) => setUsername(value)}
-          >
+          <select ref={inputEl} required className='form-control' {...username}>
             {' '}
             {users.map(user => (
               <option key={user} value={user}>
@@ -58,28 +56,17 @@ const CreateExercise = props => {
             type='text'
             required
             className='form-control'
-            value={description}
-            onChange={({ target: { value } }) => setDescription(value)}
+            {...description}
           />
         </div>
         <div className='form-group'>
           <label>Duration in minutes: </label>
-          <input
-            type='text'
-            required
-            className='form-control'
-            value={duration}
-            onChange={({ target: { value } }) => setDuration(value)}
-          />
+          <input type='text' required className='form-control' {...duration} />
         </div>
         <div className='form-group'>
           <label>Date: </label>
           <div>
-            <DatePicker
-              selected={date}
-              value={date}
-              onChange={selected => setDate(selected)}
-            />
+            <DatePicker selected={date.value} {...date} />
           </div>
         </div>
         <div className='form-group'>
@@ -92,6 +79,18 @@ const CreateExercise = props => {
       </form>
     </div>
   )
+}
+
+const useFormInput = initialValue => {
+  const [value, setValue] = useState(initialValue)
+  const handleChange = e => {
+    const newValue = e.target ? e.target.value : e
+    setValue(newValue)
+  }
+  return {
+    value,
+    onChange: handleChange
+  }
 }
 
 export default CreateExercise
